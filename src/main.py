@@ -30,7 +30,7 @@ input_gain.pack(anchor="w", padx=10)
 
 display_btn = tk.Button(
     window, text="Display spectrum", font=("Roboto", 18),
-    command=lambda: displaySpectrum(input_lo.get(), input_hi.get(), input_gain.get()))
+    command=lambda:displaySpectrum.displaySpectrum(input_lo.get(), input_hi.get(), input_gain.get()))
 display_btn.pack()
 
 while True:

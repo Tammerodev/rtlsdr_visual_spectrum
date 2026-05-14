@@ -4,6 +4,9 @@ from time import gmtime, strftime
 
 import rtl
 
+block_freqs = []
+block_psd_charts = []
+
 def remove_block_dc_spike(p, f, width=10):
     cleaned = p.copy()
 
@@ -21,8 +24,8 @@ def remove_block_dc_spike(p, f, width=10):
 # lo (minimum frequency) to hi (maximum frequency) in MHz.
 def readRange(lo, hi, bw):  
     for center_f in np.arange(lo, hi, bw):
-        sdr.center_freq = center_f * 1e6
-        samples = sdr.read_samples(256*1024)
+        rtl.sdr.center_freq = center_f * 1e6
+        samples = rtl.sdr.read_samples(256*1024)
 
         Pxx, freqs = plt.psd(
             samples,
@@ -45,7 +48,7 @@ def displaySpectrum(lo_str, hi_str, gain):
     BANDWIDTH_MHZ = 2.4
     STEP_MHZ = 2.4
 
-    configRTL(BANDWIDTH_MHZ, int(gain))
+    rtl.configRTL(BANDWIDTH_MHZ, int(gain))
 
     time_start = strftime("%d.%m.%Y %H:%M:%S", gmtime());
 
@@ -59,7 +62,7 @@ def displaySpectrum(lo_str, hi_str, gain):
 
     samples = readRange(range_lo, range_hi, STEP_MHZ);
 
-    sdr.close()
+    rtl.sdr.close()
 
     for f, p in zip(block_freqs, block_psd_charts):
         plt.plot(f, p, color="red")
